@@ -1,6 +1,7 @@
 package ru.job4j.rest_template.controller;
 
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +23,11 @@ public class Controller {
     @GetMapping
     public List<Passport> findAll() {
         return passportAPI.findAll();
+    }
+
+    @GetMapping("/threemonth")
+    @Scheduled(fixedDelay = 5000)
+    public List<Passport> getBeforeThreeMonth(){
+        return passportAPI.getBeforeThreeMonth();
     }
 }

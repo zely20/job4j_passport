@@ -75,13 +75,9 @@ public class PassportAPI {
         ).getBody();
     }
 
-
-
-
-
-
-
-
+    public List<Passport> findAll() {
+        return getList(url);
+    }
 
     public List<Passport> getList(String url) {
         List<Passport> body = client.exchange(

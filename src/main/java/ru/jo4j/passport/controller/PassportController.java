@@ -1,7 +1,9 @@
 package ru.jo4j.passport.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import ru.jo4j.passport.kafka.ProducerService;
 import ru.jo4j.passport.model.Passport;
 import ru.jo4j.passport.service.PassportService;
 
@@ -12,10 +14,11 @@ import java.util.List;
 public class PassportController {
 
     private final PassportService passportService;
+    private final ProducerService producerService;
 
-    public PassportController(PassportService passportService) {
+    public PassportController(PassportService passportService, ProducerService producerService) {
         this.passportService = passportService;
-        ;
+        this.producerService = producerService;
     }
 
     @GetMapping
@@ -53,7 +56,10 @@ public class PassportController {
 
     @GetMapping("/getBeforeThreeMonth")
     @ResponseStatus(HttpStatus.OK)
+    @Scheduled(fixedDelay = 5000)
     public List<Passport> getBeforeThreeMonth() {
+        List<Passport> passports = passportService.getBeforeThreeMonth();
+        producerService.onApiCall(passports.toString());
         return passportService.getBeforeThreeMonth();
     }
 
